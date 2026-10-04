@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Triangle Area</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="{{url_for('static', filename='LinkElist logo.png')}}" alt="LinkElist Logo">
+        </div>
+        <div class="nav">
+            <ul>
+                <li><a href="{{url_for('index')}}">Home</a></li>
+                <li><a href="{{url_for('profile')}}">Profile</a></li>
+                <li><a href="{{url_for('works')}}">Works</a></li>
+                <li><a href="{{url_for('contact')}}">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="project-page">
+        <div class="project-container">
+            <div class="project-label">
+                GEOMETRY CALCULATOR
+            </div>
+            <h1>Area of a Triangle</h1>
+            <p class="project-description">
+                Calculate the area of a triangle using its base and height.
+            </p>
+            <div class="formula">
+                A = ½bh
+            </div>
+
+            <form method="POST" class="project-form">
+
+                <label for="base">
+                    Base
+                </label>
+
+                <input
+                    type="number"
+                    id="base"
+                    name="base"
+                    placeholder="Enter base"
+                    step="any"
+                    required
+                >
+
+                <label for="height">
+                    Height
+                </label>
+
+                <input
+                    type="number"
+                    id="height"
+                    name="height"
+                    placeholder="Enter height"
+                    step="any"
+                    required
+                >
+
+                <button type="submit">
+                    Calculate Area
+                </button>
+            </form>
+
+            {% if result is not none %}
+            <div class="result-box">
+                <span>AREA OF TRIANGLE</span>
+                <strong>{{ result }}</strong>
+                <small>square units</small>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

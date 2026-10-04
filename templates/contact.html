@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Contact</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="{{url_for('static', filename='LinkElist logo.png')}}" alt="LinkElist Logo">
+        </div>
+        <div class="nav">
+            <ul>
+                <li><a href="{{url_for('index')}}">Home</a></li>
+                <li><a href="{{url_for('profile')}}">Profile</a></li>
+                <li><a href="{{url_for('works')}}">Works</a></li>
+                <li><a href="{{url_for('contact')}}">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="contact-page">
+        <section class="contact-header">
+            <p class="contact-label">GET IN TOUCH</p>
+            <h1>Let's get linked.</h1>
+            <p>Link<span class="elis-text">Elis</span>t me through any of the platform below!</p>
+        </section>
+
+        <section class="contact-grid">
+            <a href="https://www.facebook.com/AljonAcademic" target="_blank" class="contact-card">
+                <div class="contact-icon facebook-icon">
+                    f
+                </div>
+                <div class="contact-info">
+                    <span>Facebook</span>
+                    <strong>Connect with me</strong>
+                </div>
+
+                <div class="contact-arrow">
+                    ↗
+                </div>
+            </a>
+            <a href="https://www.linkedin.com/in/aljonelis/" target="_blank" class="contact-card">
+                <div class="contact-icon linkedin-icon">
+                    in
+                </div>
+                <div class="contact-info">
+                    <span>LinkedIn</span>
+                    <strong>View my professional profile</strong>
+                </div>
+
+                <div class="contact-arrow">
+                    ↗
+                </div>
+            </a>
+            <a href="mailto: aljoncelis@iskolarngbayan.pup.edu.ph" target="_blank" class="contact-card">
+                <div class="contact-icon email-icon">
+                    @
+                </div>
+                <div class="contact-info">
+                    <span>Email</span>
+                    <strong>Send me a message</strong>
+                </div>
+
+                <div class="contact-arrow">
+                    ↗
+                </div>
+            </a>
+            <a href="https://github.com/elisaljon29-prog" target="_blank" class="contact-card">
+                <div class="contact-icon github-icon">
+                    &lt;/&gt;
+                </div>
+                <div class="contact-info">
+                    <span>GitHub</span>
+                    <strong>View my projects</strong>
+                </div>
+
+                <div class="contact-arrow">
+                    ↗
+                </div>
+            </a>
+        </section>
+    </main>
+</body>
+</html>

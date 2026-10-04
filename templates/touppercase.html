@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Convert to Uppercase</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="{{url_for('static', filename='LinkElist logo.png')}}" alt="LinkElist Logo">
+        </div>
+        <div class="nav">
+            <ul>
+                <li><a href="{{url_for('index')}}">Home</a></li>
+                <li><a href="{{url_for('profile')}}">Profile</a></li>
+                <li><a href="{{url_for('works')}}">Works</a></li>
+                <li><a href="{{url_for('contact')}}">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="project-page">
+        <div class="project-container">
+            <div class="project-label">
+                STRING MANIPULATION
+            </div>
+
+            <h1>Convert String to Upper Case</h1>
+
+            <p class="project-description">
+                Enter a word or sentence below and convert it into
+                uppercase.
+            </p>
+
+            <form method="POST" class="project-form">
+                <label for="inputString">
+                    Enter your text
+                </label>
+                <input
+                    type="text"
+                    id="inputString"
+                    name="inputString"
+                    placeholder="Type something..."
+                    required
+                >
+                <button type="submit">
+                    Convert to Uppercase
+                </button>
+            </form>
+            {% if result %}
+            <div class="result-box">
+                <span>RESULT</span>
+                <strong>{{ result }}</strong>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Profile | LinkElis Portfolio</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='LinkElist logo.png') }}" alt="LinkElist Logo">
+        </div>
+        <div class="nav">
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('works') }}">Works</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="profile-page">
+        <section class="profile-intro">
+            <div class="profile-text">
+                <p class="profile-label">ABOUT ME</p>
+                <h1>Aljon Elis</h1>
+                <h2>Student &bull; Computer Engineering</h2>
+                <p>
+                    Hi! I am Aljon Elis, a student of Computer Engineering at the Polytechnic University of the Philippines. My goal is to become a proficient software developer and contribute to innovative solutions in the tech industry.
+                </p>
+            </div>
+            <div class="profile-photo">
+                <img src="{{ url_for('static', filename='profile.jpg') }}"
+                     alt="Professional Photo">
+            </div>
+        </section>
+
+        <section class="profile-section">
+            <h2>Personal Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <h3>Full Name</h3>
+                    <p>Aljon Elis</p>
+                </div>
+                <div class="info-item">
+                    <h3>Age</h3>
+                    <p>18</p>
+                </div>
+                <div class="info-item">
+                    <h3>Course</h3>
+                    <p>Bachelor of Science in Computer Engineering</p>
+                </div>
+                <div class="info-item">
+                    <h3>School</h3>
+                    <p>Polytechnic University of the Philippines</p>
+                </div>
+                <div class="info-item">
+                    <h3>Location</h3>
+                    <p>Quezon City, Philippines</p>
+                </div>
+                <div class="info-item">
+                    <h3>Interests</h3>
+                    <p>Technology, Programming, Leadership, Community Service</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="profile-section">
+            <h2>Education</h2>
+            <div class="education-item">
+                <h3>Polytechnic University of the Philippines</h3>
+                <p>Bachelor of Science in Computer Engineering</p>
+                <p>College of Engineering</p>
+            </div>
+        </section>
+
+        <section class="profile-section certifications-section">
+            <div class="section-heading">
+                <p class="section-label">CERTIFICATIONS</p>
+                <h2>Learning &amp; Certifications</h2>
+            </div>
+            <p class="certifications-intro">
+                Certifications and courses I've completed to continuously
+                expand my knowledge and skills.
+            </p>
+
+            <div class="certifications-grid">
+                <div class="certification-card">
+                    <div class="certification-icon">✓</div>
+                    <div class="certification-content">
+                        <span class="certification-status">CERTIFIED</span>
+                        <h3>Introduction to Technology for Teaching and Learning</h3>
+                        <p class="certification-issuer">University of the Philippines Open University</p>
+                        <div class="certification-date">
+                            <span>Issued</span>
+                            <strong>Mar 2026</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="certification-card">
+                    <div class="certification-icon">✓</div>
+                    <div class="certification-content">
+                        <span class="certification-status">CERTIFIED</span>
+                        <h3>Data Annotation for Aspiring BPO Professionals</h3>
+                        <p class="certification-issuer">University of the Philippines Open University</p>
+                        <div class="certification-date">
+                            <span>Issued</span>
+                            <strong>Mar 2026</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="certification-card">
+                    <div class="certification-icon">✓</div>
+                    <div class="certification-content">
+                        <span class="certification-status">CERTIFIED</span>
+                        <h3>AI Essentials: Theory and Practice</h3>
+                        <p class="certification-issuer">University of the Philippines Open University</p>
+                        <div class="certification-date">
+                            <span>Issued</span>
+                            <strong>Sep 2026</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

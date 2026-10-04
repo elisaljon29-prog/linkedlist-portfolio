@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    
+    <title>Works | LinkElis Portfolio</title>
+</head>
+
+<body>
+
+    <nav>
+
+        <div class="logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='LinkElist logo.png') }}"
+                     alt="LinkElis Logo">
+            </a>
+        </div>
+
+        <div class="nav">
+            <ul>
+                <li>
+                    <a href="{{ url_for('index') }}">Home</a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('profile') }}">Profile</a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('works') }}">Works</a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('contact') }}">Contact</a>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+
+    <main class="works-page">
+        <header class="works-header">
+            <p class="works-label">PORTFOLIO</p>
+            <h1>Selected Works</h1>
+            <p>A selection of projects and practical exercises built while developing my skills.</p>
+        </header>
+
+        <div class="works-list">
+
+            <a href="{{ url_for('touppercase') }}">
+                String to Upper Case
+            </a>
+
+            <a href="{{ url_for('acircle') }}">
+                Area of a Circle
+            </a>
+
+            <a href="{{ url_for('atriangle') }}">
+                Area of a Triangle
+            </a>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>
