@@ -3,35 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZ0Jyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous"
-    referrerpolicy="no-referrer" />
-
+    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-
     <title>LinkElist Portfolio</title>
 </head>
 <body>
     <nav>
         <div class="logo">
-            <img src="{{url_for('static', filename='LinkElist logo.png')}}" alt="LinkElist Logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='LinkElist logo.png') }}" alt="LinkElist Logo">
+            </a>
         </div>
         <div class="nav">
             <ul>
-                <li><a href="{{url_for('index')}}">Home</a></li>
-                <li><a href="{{url_for('profile')}}">Profile</a></li>
-                <li><a href="{{url_for('works')}}">Works</a></li>
-                <li><a href="{{url_for('contact')}}">Contact</a></li>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('works') }}">Works</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
             </ul>
         </div>
     </nav>
-    <main>
-        <h1>Welcome to Link<span class="elis-text">Elis</span>t Portfolio</h1>
-        <p>A simple portfolio website created using Flask of Aljon Elis.</p>
+
+    <main class="home-page">
+        <section class="home-intro" aria-labelledby="home-title">
+            <p class="home-eyebrow">COMPUTER ENGINEERING · PUP</p>
+            <h1 id="home-title">Welcome to Link<span class="elis-text">Elis</span>t Portfolio</h1>
+            <p>A portfolio by Aljon Elis, created with Flask as part of the Data Structures and Algorithms course.</p>
+        </section>
+
+        <section class="home-certificates" aria-labelledby="home-certificates-title">
+            <div class="home-certificates-heading">
+                <div>
+                    <p class="home-eyebrow">LEARNING &amp; GROWTH</p>
+                    <h2 id="home-certificates-title">Certificates</h2>
+                </div>
+                <a href="{{ url_for('profile') }}#certifications">View all learning &amp; certifications <span aria-hidden="true">→</span></a>
+            </div>
+
+            <div class="home-certificate-grid">
+                <a class="home-certificate-card" href="{{ url_for('static', filename='Certificate 1.jpg') }}" target="_blank" rel="noopener noreferrer">
+                    <span class="home-certificate-number">01</span>
+                    <span class="home-certificate-image">
+                        <img src="{{ url_for('static', filename='Certificate 1.jpg') }}" alt="Certificate for Introduction to Technology for Teaching and Learning">
+                    </span>
+                    <span class="home-certificate-title">Introduction to Technology for Teaching and Learning</span>
+                    <span class="home-certificate-issuer">University of the Philippines Open University</span>
+                </a>
+
+                <a class="home-certificate-card" href="{{ url_for('static', filename='Certificate 2.jpg') }}" target="_blank" rel="noopener noreferrer">
+                    <span class="home-certificate-number">02</span>
+                    <span class="home-certificate-image">
+                        <img src="{{ url_for('static', filename='Certificate 2.jpg') }}" alt="Certificate for Data Annotation for Aspiring BPO Professionals">
+                    </span>
+                    <span class="home-certificate-title">Data Annotation for Aspiring BPO Professionals</span>
+                    <span class="home-certificate-issuer">University of the Philippines Open University</span>
+                </a>
+
+                <a class="home-certificate-card" href="{{ url_for('static', filename='Certificate 3.jpg') }}" target="_blank" rel="noopener noreferrer">
+                    <span class="home-certificate-number">03</span>
+                    <span class="home-certificate-image">
+                        <img src="{{ url_for('static', filename='Certificate 3.jpg') }}" alt="Certificate for AI Essentials: Theory and Practice">
+                    </span>
+                    <span class="home-certificate-title">AI Essentials: Theory and Practice</span>
+                    <span class="home-certificate-issuer">University of the Philippines Open University</span>
+                </a>
+            </div>
+        </section>
     </main>
-        </ul>
-    </nav>
+</body>
+</html>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <title>Profile | LinkElis Portfolio</title>
 </head>
@@ -79,19 +79,20 @@
             </div>
         </section>
 
-        <section class="profile-section certifications-section">
+        <section class="profile-section certifications-section" id="certifications">
             <div class="section-heading">
                 <p class="section-label">CERTIFICATIONS</p>
                 <h2>Learning &amp; Certifications</h2>
             </div>
             <p class="certifications-intro">
-                Certifications and courses I've completed to continuously
-                expand my knowledge and skills.
+                Certifications and courses I've completed to continuously expand my knowledge and skills.
             </p>
 
             <div class="certifications-grid">
                 <div class="certification-card">
-                    <div class="certification-icon">✓</div>
+                    <div class="certification-icon">
+                        <img src="{{ url_for('static', filename='UPOU.png') }}" alt="University of the Philippines Open University logo">
+                    </div>
                     <div class="certification-content">
                         <span class="certification-status">CERTIFIED</span>
                         <h3>Introduction to Technology for Teaching and Learning</h3>
@@ -103,7 +104,9 @@
                     </div>
                 </div>
                 <div class="certification-card">
-                    <div class="certification-icon">✓</div>
+                    <div class="certification-icon">
+                        <img src="{{ url_for('static', filename='UPOU.png') }}" alt="University of the Philippines Open University logo">
+                    </div>
                     <div class="certification-content">
                         <span class="certification-status">CERTIFIED</span>
                         <h3>Data Annotation for Aspiring BPO Professionals</h3>
@@ -115,7 +118,9 @@
                     </div>
                 </div>
                 <div class="certification-card">
-                    <div class="certification-icon">✓</div>
+                    <div class="certification-icon">
+                        <img src="{{ url_for('static', filename='UPOU.png') }}" alt="University of the Philippines Open University logo">
+                    </div>
                     <div class="certification-content">
                         <span class="certification-status">CERTIFIED</span>
                         <h3>AI Essentials: Theory and Practice</h3>
@@ -124,6 +129,51 @@
                             <span>Issued</span>
                             <strong>Sep 2026</strong>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="profile-section organizations-section">
+            <div class="section-heading">
+                <p class="section-label">ORGANIZATIONS</p>
+                <h2>Leadership &amp; Memberships</h2>
+            </div>
+            <p class="certifications-intro">
+                Organizations I've been a part of to develop leadership and other related skills.
+            </p>
+            <div class="organizations-grid">
+                <div class="organization-card">
+                    <div class="organization-logo">
+                        <img src="{{ url_for('static', filename='CISCO.jpg') }}" alt="CISCO Net Connect - PUP logo">
+                    </div>
+                    <div class="organization-content">
+                        <span class="organization-status">Member</span>
+                        <h3>CISCO Net Connect - PUP</h3>
+                        <p class="organization-issuer">Operations Department</p>
+                    </div>
+                </div>
+
+                <div class="organization-card">
+                    <div class="organization-logo">
+                        <img src="{{ url_for('static', filename='ACCESS.jpg') }}" alt="PUP ACCESS logo">
+                    </div>
+                    <div class="organization-content">
+                        <span class="organization-status">Junior ACCESS Officer</span>
+                        <h3>PUP ACCESS</h3>
+                        <p class="organization-issuer">Academics Department</p>
+                    </div>
+                </div>
+
+                <div class="organization-card">
+                    <div class="organization-logo">
+                        <img src="{{ url_for('static', filename='Maharlika.jpg') }}" alt="PUP Maharlika Dance Artist logo">
+                    </div>
+                    <div class="organization-content">
+                        <span class="organization-status">Member</span>
+                        <h3>PUP Maharlika Dance Artist</h3>
+                        <p class="organization-issuer">Batch 45</p>
                     </div>
                 </div>
             </div>

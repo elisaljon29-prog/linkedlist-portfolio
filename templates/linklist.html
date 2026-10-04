@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Linked List | LinkElis Portfolio</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='LinkElist logo.png') }}" alt="LinkElis Logo">
+            </a>
+        </div>
+        <div class="nav">
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('works') }}">Works</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="project-page linklist-page">
+        <section class="project-container linklist-container">
+            <h1>Linked List Starter</h1>
+            <p class="project-description">
+                basta Laboratory 3 Visualization
+            </p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="linklist-message linklist-message-{{ category }}" role="status">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <section class="linklist-visual" aria-labelledby="list-heading">
+                <div class="linklist-section-heading">
+                    <div>
+                        <p class="linklist-eyebrow">YOUR DATA STRUCTURE</p>
+                        <h2 id="list-heading">Node connections</h2>
+                    </div>
+                    <span class="linklist-count">{{ values|length }} {% if values|length == 1 %}node{% else %}nodes{% endif %}</span>
+                </div>
+
+                {% if values %}
+                <div class="linklist-scroll" role="region" aria-label="Linked list nodes" tabindex="0">
+                    <ol class="linklist-nodes">
+                        {% for value in values %}
+                        <li class="linklist-node">
+                            <span class="linklist-pointer">
+                                {% if loop.first and loop.last %}HEAD · TAIL{% elif loop.first %}HEAD{% elif loop.last %}TAIL{% else %}&nbsp;{% endif %}
+                            </span>
+                            <div class="linklist-node-card">
+                                <strong>{{ value }}</strong>
+                                <span>data</span>
+                            </div>
+                            {% if not loop.last %}
+                            <span class="linklist-arrow" aria-hidden="true">→</span>
+                            {% else %}
+                            <span class="linklist-next">next: null</span>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+                {% else %}
+                <div class="linklist-empty">
+                    <strong>Empty linked list</strong>
+                    <span>Add a value below to create your first node.</span>
+                </div>
+                {% endif %}
+            </section>
+
+            <section class="linklist-operations" aria-labelledby="operations-heading">
+                <div class="linklist-section-heading">
+                    <div>
+                        <p class="linklist-eyebrow">TRY IT OUT</p>
+                        <h2 id="operations-heading">Operations</h2>
+                    </div>
+                </div>
+
+                <div class="linklist-operation-grid">
+                    <form method="post" class="linklist-operation-card">
+                        <h3>Add a value</h3>
+                        <label for="add-value">Value</label>
+                        <input type="text" id="add-value" name="value" placeholder="e.g. 40" autocomplete="off">
+                        <div class="linklist-button-row">
+                            <button class="linklist-button" type="submit" name="action" value="insert_beginning">Add to start</button>
+                            <button class="linklist-button linklist-button-secondary" type="submit" name="action" value="insert_end">Add to end</button>
+                        </div>
+                    </form>
+
+                    <form method="post" class="linklist-operation-card">
+                        <h3>Find or remove a value</h3>
+                        <label for="find-value">Value</label>
+                        <input type="text" id="find-value" name="value" placeholder="Value to find or remove" autocomplete="off">
+                        <div class="linklist-button-row">
+                            <button class="linklist-button linklist-button-secondary" type="submit" name="action" value="search">Search</button>
+                            <button class="linklist-button linklist-button-danger" type="submit" name="action" value="remove_value">Remove value</button>
+                        </div>
+                    </form>
+
+                    <form method="post" class="linklist-operation-card">
+                        <h3>Insert after a node</h3>
+                        <label for="target-value">Existing value</label>
+                        <input type="text" id="target-value" name="target" placeholder="Insert after…" autocomplete="off">
+                        <label for="new-value">New value</label>
+                        <input type="text" id="new-value" name="new_value" placeholder="Value to insert" autocomplete="off">
+                        <button class="linklist-button" type="submit" name="action" value="insert_after">Insert after value</button>
+                    </form>
+
+                    <div class="linklist-operation-card linklist-maintenance">
+                        <h3>Manage the list</h3>
+                        <p>Remove an end node, clear everything, or restore the starter values.</p>
+                        <form method="post" class="linklist-maintenance-form">
+                            <button class="linklist-button linklist-button-danger" type="submit" name="action" value="remove_beginning">Remove first</button>
+                            <button class="linklist-button linklist-button-danger" type="submit" name="action" value="remove_end">Remove last</button>
+                            <button class="linklist-button linklist-button-secondary" type="submit" name="action" value="clear">Clear list</button>
+                            <button class="linklist-button linklist-button-quiet" type="submit" name="action" value="reset">Reset starter list</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+</body>
+</html>
