@@ -1717,3 +1717,252 @@ main {
         transform: none;
     }
 }
+
+
+.infix-postfix-page {
+    min-height: calc(100vh - 90px);
+    padding: 58px 24px 90px;
+    background:
+        radial-gradient(
+            ellipse at 50% 0%,
+            rgba(10, 102, 194, 0.07),
+            transparent 45%
+        ),
+        #f4f5f7;
+    text-align: left;
+}
+
+.infix-postfix-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 42px;
+    border: 1px solid #e5e8ec;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 20px 55px rgba(22, 37, 56, 0.07);
+}
+
+.infix-postfix-container > h1 {
+    margin: 0 0 28px;
+    color: #1c2e44;
+    font-size: clamp(30px, 4vw, 42px);
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.2;
+}
+
+.infix-postfix-visual {
+    margin-top: 10px;
+    padding: 26px;
+    border: 1px solid #e5e8ec;
+    border-radius: 16px;
+    background: #fbfcfd;
+}
+
+.infix-postfix-section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.infix-postfix-eyebrow {
+    margin: 0 0 6px;
+    color: #0a66c2;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.infix-postfix-section-heading h2 {
+    margin: 0;
+    color: #253247;
+    font-size: 23px;
+}
+
+.infix-postfix-count {
+    padding: 7px 12px;
+    border-radius: 20px;
+    background: #edf3f9;
+    color: #455c75;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.infix-postfix-scroll {
+    overflow-x: auto;
+    padding: 6px 2px 16px;
+}
+
+.infix-postfix-elements {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: max-content;
+    min-width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.infix-postfix-element {
+    display: flex;
+    min-width: 66px;
+    min-height: 66px;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    border: 1px solid #c9d8e8;
+    border-radius: 12px;
+    background: #fff;
+    color: #253247;
+    font-size: 21px;
+    font-weight: 700;
+    box-shadow: 0 5px 14px rgba(22, 37, 56, 0.06);
+}
+
+.infix-postfix-form {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    margin-top: 12px;
+}
+
+.infix-postfix-form label {
+    color: #34445a;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.infix-postfix-form input {
+    width: 100%;
+    min-width: 0;
+    padding: 14px 16px;
+    border: 1px solid #d8dee6;
+    border-radius: 10px;
+    outline: none;
+    background: #fff;
+    color: #253247;
+    font: inherit;
+    font-size: 15px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.infix-postfix-form input:focus {
+    border-color: #0a66c2;
+    box-shadow: 0 0 0 4px rgba(10, 102, 194, 0.10);
+}
+
+.infix-postfix-form button {
+    min-height: 48px;
+    margin-top: 8px;
+    padding: 13px 20px;
+    border: 1px solid #0a66c2;
+    border-radius: 10px;
+    background: #0a66c2;
+    color: #fff;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.infix-postfix-form button:hover {
+    transform: translateY(-2px);
+    background: #084f96;
+    box-shadow: 0 8px 20px rgba(10, 102, 194, 0.20);
+}
+
+.infix-postfix-result {
+    margin-top: 25px;
+    padding: 22px;
+    border: 1px solid #dbeafe;
+    border-radius: 13px;
+    background: #f5f9ff;
+}
+
+.infix-postfix-result p {
+    margin: 0 0 10px;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+}
+
+.infix-postfix-result strong {
+    display: block;
+    overflow-wrap: anywhere;
+    color: #0a66c2;
+    font-size: clamp(22px, 3vw, 30px);
+    line-height: 1.5;
+}
+
+.infix-postfix-message {
+    margin-bottom: 20px;
+    padding: 13px 16px;
+    border: 1px solid #cfe2d5;
+    border-radius: 10px;
+    background: #f1f8f3;
+    color: #27613a;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.infix-postfix-message-error {
+    border-color: #f0d1d1;
+    background: #fff5f4;
+    color: #9b3838;
+}
+
+.infix-postfix-empty {
+    margin-bottom: 24px;
+    padding: 22px;
+    border: 1px dashed #d5dce4;
+    border-radius: 12px;
+    color: #64748b;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+    .infix-postfix-page {
+        padding: 36px 16px 60px;
+    }
+
+    .infix-postfix-container {
+        padding: 28px 20px;
+    }
+
+    .infix-postfix-visual {
+        padding: 18px;
+    }
+
+    .infix-postfix-element {
+        min-width: 56px;
+        min-height: 56px;
+    }
+}
+
+@media (max-width: 420px) {
+    .infix-postfix-section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+.infix-postfix-page{padding:56px 24px 80px;background:#f4f5f7;min-height:80vh;color:#253247;font-family:'Poppins',sans-serif}
+.infix-postfix-container{max-width:1050px;margin:0 auto;background:#fff;border:1px solid #e1e6ed;border-radius:26px;padding:clamp(24px,4vw,52px);box-shadow:0 18px 55px rgba(29,46,68,.08)}
+.infix-postfix-container h1{font-size:clamp(2rem,4vw,3.25rem);line-height:1.15;letter-spacing:-.04em;margin:0 0 12px;color:#1c2e44}
+.infix-postfix-intro{color:#66758a;line-height:1.7;margin:0 0 30px;max-width:760px}
+.infix-postfix-eyebrow{font-size:.76rem;font-weight:700;letter-spacing:.14em;color:#0a66c2;text-transform:uppercase;margin:0 0 8px}
+.infix-postfix-panel{background:#fbfcfe;border:1px solid #e1e7ef;border-radius:20px;padding:clamp(20px,3vw,32px);margin-top:22px;min-width:0}
+.infix-postfix-section-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}.infix-postfix-section-heading h2,.infix-postfix-result h2{font-size:clamp(1.35rem,2.4vw,1.8rem);margin:0;color:#1c2e44;letter-spacing:-.025em}.infix-postfix-section-heading.small{margin-bottom:12px}.infix-postfix-section-heading.small h3{margin:0}
+.infix-postfix-count{flex-shrink:0;background:#edf3f9;color:#34516f;padding:9px 14px;border-radius:999px;font-size:.82rem;font-weight:600}
+.infix-postfix-label{display:block;font-size:.9rem;font-weight:600;margin:0 0 9px}.infix-postfix-input{box-sizing:border-box;width:100%;padding:15px 17px;border:1px solid #ccd7e4;border-radius:12px;background:#fff;color:#1c2e44;font:inherit;font-size:1rem;outline:none;transition:border-color .2s,box-shadow .2s}.infix-postfix-input:focus{border-color:#0a66c2;box-shadow:0 0 0 4px rgba(10,102,194,.11)}
+.infix-postfix-hint{font-size:.82rem;color:#718096;line-height:1.6;margin-top:9px}.infix-postfix-blocks-wrap{margin-top:18px;padding:16px;background:#f4f8fc;border:1px dashed #cbd9e8;border-radius:14px;min-height:68px}.infix-postfix-blocks{display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-width:0}.infix-postfix-token{width:42px;height:46px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;border:1px solid #d8e3ef;background:#fff;color:#253247;font-size:1.12rem;font-weight:600;box-shadow:0 2px 5px rgba(27,47,70,.04);flex:0 0 auto}.token-operator{background:#eaf3ff;color:#0a66c2;border-color:#c8defb}.token-paren{background:#f2edff;color:#6941a5;border-color:#dfd2ff}.token-output{background:#e9f7ef;color:#187348;border-color:#c5ead4}.stack-token{background:#fff1e8;color:#a44c12;border-color:#f5d2ba}.stack-top{outline:2px solid #0a66c2;outline-offset:1px}.infix-postfix-placeholder{color:#8390a0;font-size:.9rem;padding:8px 2px}
+.infix-postfix-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.infix-postfix-button,.infix-postfix-copy{border:1px solid #0a66c2;border-radius:11px;padding:12px 18px;background:#0a66c2;color:white;font:inherit;font-size:.9rem;font-weight:600;cursor:pointer;transition:transform .15s,background .15s,box-shadow .15s}.infix-postfix-button:hover:not(:disabled),.infix-postfix-copy:hover:not(:disabled){background:#084f96;box-shadow:0 5px 14px #0a66c226;transform:translateY(-1px)}.infix-postfix-button-secondary{background:white;color:#31506e;border-color:#d3deea}.infix-postfix-button-secondary:hover:not(:disabled){background:#f0f5fa;color:#1c2e44}.infix-postfix-button:disabled,.infix-postfix-copy:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.infix-postfix-error{margin:16px 0 0;color:#b42318;background:#fff1f0;border:1px solid #ffd2ce;padding:12px 14px;border-radius:10px;font-size:.9rem}.infix-postfix-visual-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}.infix-postfix-subpanel{min-width:0;padding:18px;background:#fff;border:1px solid #e4eaf1;border-radius:15px}.infix-postfix-subpanel h3{font-size:1rem;margin:0 0 14px;color:#253247}.infix-postfix-current{width:56px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:13px;background:#eaf3ff;border:1px solid #c8defb;color:#0a66c2;font-size:1.5rem;font-weight:700}.infix-postfix-explanation{font-size:.9rem;color:#66758a;line-height:1.65;margin:14px 0 0}.infix-postfix-stack{display:flex;flex-wrap:wrap;gap:9px;align-items:center;min-height:54px}.postfix-progress{margin-top:16px}.output-blocks{min-height:44px}.step-actions{justify-content:flex-start}.infix-postfix-result{margin-top:22px;padding:26px;background:#f3f8ff;border:1px solid #d7e7ff;border-radius:18px}.infix-postfix-result h2{margin-bottom:14px}.infix-postfix-final{font-size:clamp(1.8rem,4vw,2.7rem);font-weight:700;letter-spacing:.04em;overflow-wrap:anywhere;color:#0a66c2;min-height:1.3em;margin-bottom:18px}.infix-postfix-copy{background:#fff;color:#0a66c2}.infix-postfix-copy:hover:not(:disabled){color:#fff}.infix-postfix-message{padding:12px 15px;border-radius:10px;margin:14px 0}.infix-postfix-message-error{background:#fff1f0;color:#b42318}.infix-postfix-message-success{background:#e9f7ef;color:#187348}
+@media(max-width:650px){.infix-postfix-page{padding:28px 12px 48px}.infix-postfix-container{padding:22px 16px;border-radius:18px}.infix-postfix-panel{padding:18px 14px}.infix-postfix-visual-grid{grid-template-columns:1fr}.infix-postfix-section-heading{align-items:flex-start}.infix-postfix-count{font-size:.75rem;padding:7px 10px}.infix-postfix-token{width:37px;height:41px}.infix-postfix-actions .infix-postfix-button{flex:1 1 auto}}

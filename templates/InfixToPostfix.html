@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Infix to Postfix | LinkElis Portfolio</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='LinkElist logo.png') }}" alt="LinkElis Logo">
+            </a>
+        </div>
+        <div class="nav">
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('works') }}">Works</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="infix-postfix-page">
+      <section class="infix-postfix-container">
+        <p class="infix-postfix-eyebrow">DATA STRUCTURE VISUALIZER</p>
+        <h1>Infix to Postfix Converter</h1>
+        <p class="infix-postfix-intro">Enter an expression, then watch how each symbol moves through the stack to build the answer.</p>
+
+        <section class="infix-postfix-panel" aria-labelledby="input-title">
+          <div class="infix-postfix-section-heading">
+            <div><p class="infix-postfix-eyebrow">STEP 1</p><h2 id="input-title">Infix Expression</h2></div>
+            <span class="infix-postfix-count" id="symbol-count">0 symbols</span>
+          </div>
+          <label class="infix-postfix-label" for="infix">Type your expression</label>
+          <input class="infix-postfix-input" type="text" id="infix" placeholder="Example: A+B*C" autocomplete="off" spellcheck="false">
+          <div class="infix-postfix-hint">Use letters or digits as operands, + − * / ^ as operators, and parentheses. Spaces are allowed.</div>
+          <div class="infix-postfix-blocks-wrap"><div class="infix-postfix-blocks" id="infix-blocks" aria-label="Infix symbols"><span class="infix-postfix-placeholder">Your expression blocks will appear here.</span></div></div>
+          <div class="infix-postfix-actions">
+            <button type="button" class="infix-postfix-button" id="convert-btn">Convert expression</button>
+            <button type="button" class="infix-postfix-button infix-postfix-button-secondary" id="clear-btn">Clear</button>
+          </div>
+          <p class="infix-postfix-error" id="error-message" role="alert" hidden></p>
+        </section>
+
+        <section class="infix-postfix-panel" aria-labelledby="steps-title">
+          <div class="infix-postfix-section-heading"><div><p class="infix-postfix-eyebrow">STEP 2</p><h2 id="steps-title">Conversion Walkthrough</h2></div><span class="infix-postfix-count" id="progress-count">Not started</span></div>
+          <div class="infix-postfix-visual-grid">
+            <div class="infix-postfix-subpanel"><h3>Current symbol</h3><div class="infix-postfix-current" id="current-symbol">—</div><p class="infix-postfix-explanation" id="step-explanation">Enter an expression and select Convert to begin.</p></div>
+            <div class="infix-postfix-subpanel"><div class="infix-postfix-section-heading small"><h3>Operator stack</h3><span class="infix-postfix-count" id="stack-count">0 items</span></div><div class="infix-postfix-stack" id="stack-view"><span class="infix-postfix-placeholder">Stack is empty</span></div></div>
+          </div>
+          <div class="infix-postfix-subpanel postfix-progress"><h3>Postfix being built</h3><div class="infix-postfix-blocks output-blocks" id="output-view"><span class="infix-postfix-placeholder">The output will appear here.</span></div></div>
+          <div class="infix-postfix-actions step-actions"><button type="button" class="infix-postfix-button infix-postfix-button-secondary" id="prev-btn" disabled>← Previous</button><button type="button" class="infix-postfix-button" id="next-btn" disabled>Next step →</button><button type="button" class="infix-postfix-button infix-postfix-button-secondary" id="show-all-btn" disabled>Show solution</button></div>
+        </section>
+
+        <section class="infix-postfix-result" aria-live="polite"><p class="infix-postfix-eyebrow">FINAL ANSWER</p><h2>Postfix Expression</h2><div class="infix-postfix-final" id="final-answer">—</div><button type="button" class="infix-postfix-copy" id="copy-btn" disabled>Copy answer</button></section>
+      </section>
+    </main>
+    <script>
+    (() => {
+      const input = document.getElementById('infix');
+      const blocks = document.getElementById('infix-blocks');
+      const symbolCount = document.getElementById('symbol-count');
+      const error = document.getElementById('error-message');
+      const stackView = document.getElementById('stack-view');
+      const outputView = document.getElementById('output-view');
+      const currentSymbol = document.getElementById('current-symbol');
+      const explanation = document.getElementById('step-explanation');
+      const progressCount = document.getElementById('progress-count');
+      const stackCount = document.getElementById('stack-count');
+      const finalAnswer = document.getElementById('final-answer');
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const allBtn = document.getElementById('show-all-btn');
+      const copyBtn = document.getElementById('copy-btn');
+      let steps = [], stepIndex = 0, answer = '';
+      const operators = '+-*/^';
+      const precedence = op => ({'+':1,'-':1,'*':2,'/':2,'^':3}[op] || 0);
+
+      function makeBlock(text, className='') { const el=document.createElement('span'); el.className='infix-postfix-token '+className; el.textContent=text; return el; }
+      function renderInputBlocks() {
+        const chars = [...input.value].filter(ch => !/\s/.test(ch));
+        blocks.replaceChildren();
+        if (!chars.length) { const hint=document.createElement('span'); hint.className='infix-postfix-placeholder'; hint.textContent='Your expression blocks will appear here.'; blocks.append(hint); }
+        else chars.forEach((ch,i)=>blocks.append(makeBlock(ch, 'token-'+(operators.includes(ch)?'operator':(/[()]/.test(ch)?'paren':'operand')))));
+        symbolCount.textContent = `${chars.length} ${chars.length===1?'symbol':'symbols'}`;
+      }
+      function buildSteps(expr) {
+        const chars=[...expr].filter(ch=>!/\s/.test(ch));
+        if (!chars.length) throw Error('Please enter an infix expression first.');
+        if (chars.some(ch=>!/[A-Za-z0-9()+\-*/^]/.test(ch))) throw Error('Unsupported character found. Use letters, digits, operators, and parentheses.');
+        const stack=[], output=[], history=[];
+        const save=(ch,why)=>history.push({ch,why,stack:[...stack],output:[...output]});
+        for (let i=0;i<chars.length;i++) {
+          const ch=chars[i];
+          if (/[A-Za-z0-9]/.test(ch)) { output.push(ch); save(ch, `“${ch}” is an operand, so add it directly to the postfix output.`); }
+          else if (ch==='(') { stack.push(ch); save(ch, 'An opening parenthesis is pushed onto the stack.'); }
+          else if (ch===')') {
+            if (!stack.includes('(')) throw Error('There is a closing parenthesis without a matching opening parenthesis.');
+            while(stack.length && stack[stack.length-1]!=='(') output.push(stack.pop());
+            stack.pop(); save(ch, 'Pop operators into the output until the matching opening parenthesis is removed.');
+          } else if (operators.includes(ch)) {
+            while(stack.length && operators.includes(stack[stack.length-1]) && (precedence(stack[stack.length-1])>precedence(ch) || (precedence(stack[stack.length-1])===precedence(ch) && ch!=='^'))) output.push(stack.pop());
+            stack.push(ch); save(ch, `Push “${ch}” onto the stack after moving any higher- or equal-precedence operators to the output.`);
+          }
+        }
+        if(stack.includes('(')) throw Error('There is an opening parenthesis without a matching closing parenthesis.');
+        while(stack.length) { const op=stack.pop(); output.push(op); save('END', `No more symbols remain, so pop “${op}” into the output.`); }
+        history.push({ch:'DONE',why:'Conversion is complete. The output is the postfix expression.',stack:[],output:[...output]});
+        return history;
+      }
+      function renderStep() {
+        if (!steps.length) return;
+        const s=steps[stepIndex];
+        currentSymbol.textContent=s.ch==='END'?'↳':s.ch==='DONE'?'✓':s.ch;
+        explanation.textContent=s.why;
+        progressCount.textContent=`Step ${stepIndex+1} of ${steps.length}`;
+        stackCount.textContent=`${s.stack.length} ${s.stack.length===1?'item':'items'}`;
+        stackView.replaceChildren();
+        if (!s.stack.length) { const e=document.createElement('span');e.className='infix-postfix-placeholder';e.textContent='Stack is empty';stackView.append(e); }
+        else [...s.stack].reverse().forEach((ch,i)=>stackView.append(makeBlock(ch,'stack-token'+(i===0?' stack-top':''))));
+        outputView.replaceChildren();
+        if (!s.output.length) { const e=document.createElement('span');e.className='infix-postfix-placeholder';e.textContent='Output is empty';outputView.append(e); }
+        else s.output.forEach(ch=>outputView.append(makeBlock(ch,'token-output')));
+        prevBtn.disabled=stepIndex===0; nextBtn.disabled=stepIndex===steps.length-1; allBtn.disabled=stepIndex===steps.length-1;
+        if(stepIndex===steps.length-1) { answer=s.output.join(''); finalAnswer.textContent=answer; copyBtn.disabled=!answer; }
+        else { finalAnswer.textContent='In progress…'; copyBtn.disabled=true; }
+      }
+      input.addEventListener('input',renderInputBlocks);
+      document.getElementById('convert-btn').addEventListener('click',()=>{
+        error.hidden=true;
+        try { steps=buildSteps(input.value); stepIndex=0; answer=''; renderStep(); }
+        catch(e) { error.textContent=e.message; error.hidden=false; steps=[]; prevBtn.disabled=nextBtn.disabled=allBtn.disabled=true; }
+      });
+      document.getElementById('clear-btn').addEventListener('click',()=>{input.value='';renderInputBlocks();steps=[];stepIndex=0;error.hidden=true;currentSymbol.textContent='—';explanation.textContent='Enter an expression and select Convert to begin.';progressCount.textContent='Not started';stackCount.textContent='0 items';stackView.innerHTML='<span class="infix-postfix-placeholder">Stack is empty</span>';outputView.innerHTML='<span class="infix-postfix-placeholder">The output will appear here.</span>';finalAnswer.textContent='—';prevBtn.disabled=nextBtn.disabled=allBtn.disabled=copyBtn.disabled=true;});
+      prevBtn.addEventListener('click',()=>{if(stepIndex>0){stepIndex--;renderStep();}});
+      nextBtn.addEventListener('click',()=>{if(stepIndex<steps.length-1){stepIndex++;renderStep();}});
+      allBtn.addEventListener('click',()=>{if(steps.length){stepIndex=steps.length-1;renderStep();}});
+      copyBtn.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(answer);copyBtn.textContent='Copied!';setTimeout(()=>copyBtn.textContent='Copy answer',1200);}catch(e){copyBtn.textContent='Copy unavailable';}});
+      input.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('convert-btn').click();});
+      renderInputBlocks();
+    })();
+    </script>
+</body>
+</html>

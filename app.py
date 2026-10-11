@@ -238,5 +238,58 @@ def linklist():
     return render_template('linklist.html', values=values)
 
 
+class Nodes:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class InfixToPostfix:
+    def __init__(self):
+        self.stack = []
+        self.output = []
+
+    def is_operator(self, c):
+        return c in ['+', '-', '*', '/', '^']
+
+    def precedence(self, op):
+        if op == '+' or op == '-':
+            return 1
+        elif op == '*' or op == '/':
+            return 2
+        elif op == '^':
+            return 3
+        return 0
+
+    def infix_to_postfix(self, expression):
+        for char in expression:
+            if char.isalnum():
+                self.output.append(char)
+            elif char == '(': 
+                self.stack.append(char)
+            elif char == ')': 
+                while self.stack and self.stack[-1] != '(':
+                    self.output.append(self.stack.pop())
+                self.stack.pop() 
+            elif self.is_operator(char): 
+                while (self.stack and self.precedence(self.stack[-1]) >= self.precedence(char)):
+                    self.output.append(self.stack.pop())
+                self.stack.append(char)
+
+        while self.stack:
+            self.output.append(self.stack.pop())
+
+        return ''.join(self.output)
+
+@app.route('/works/area/infix_to_postfix', methods=['GET', 'POST'])
+def infix_to_postfix():
+    postfix = None
+    stack = []
+    if request.method == 'POST':
+        expression = request.form.get('infix', '')
+        converter = InfixToPostfix()
+        postfix = converter.infix_to_postfix(expression)
+        stack = converter.stack
+    return render_template('InfixToPostfix.html', postfix=postfix, stack=stack)
+
 if __name__ == "__main__":
     app.run(debug=True)
