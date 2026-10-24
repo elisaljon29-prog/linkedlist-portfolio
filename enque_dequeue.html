@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Enqueue/Dequeue | LinkElis Portfolio</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='LinkElist logo.png') }}" alt="LinkElis Logo">
+            </a>
+        </div>
+        <div class="nav">
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('works') }}">Works</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="infix-postfix-page">
+        <section class="infix-postfix-container">
+            <p class="infix-postfix-eyebrow">DATA STRUCTURE VISUALIZER</p>
+            <h1>Queue: Enqueue &amp; Dequeue</h1>
+            <p class="infix-postfix-intro">
+                Add values at the rear and remove them from the front. Follow the queue as it changes using FIFO
+                (First In, First Out).
+            </p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <p class="infix-postfix-message infix-postfix-message-{{ category }}" role="status" aria-live="polite">
+                            {{ message }}
+                        </p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <section class="infix-postfix-panel" aria-labelledby="operation-title">
+                <div class="infix-postfix-section-heading">
+                    <div>
+                        <p class="infix-postfix-eyebrow">STEP 1</p>
+                        <h2 id="operation-title">Choose a queue operation</h2>
+                    </div>
+                    <span class="infix-postfix-count">{{ queue|length }} {{ 'item' if queue|length == 1 else 'items' }}</span>
+                </div>
+
+                <form method="POST" class="queue-operation-form">
+                    <label class="infix-postfix-label" for="queue-value">Value to enqueue</label>
+                    <input
+                        class="infix-postfix-input"
+                        type="text"
+                        id="queue-value"
+                        name="value"
+                        placeholder="Enter a value"
+                        autocomplete="off"
+                    >
+                    <div class="infix-postfix-actions">
+                        <button class="infix-postfix-button" type="submit" name="action" value="enqueue">Enqueue at rear</button>
+                        <button class="infix-postfix-button infix-postfix-button-secondary" type="submit" name="action" value="dequeue" formnovalidate>Dequeue from front</button>
+                        <button class="infix-postfix-button infix-postfix-button-secondary" type="submit" name="action" value="clear" formnovalidate>Clear queue</button>
+                    </div>
+                    <p class="infix-postfix-hint">Enqueue adds the entered value to the rear. Dequeue removes the front value.</p>
+                </form>
+            </section>
+
+            <section class="infix-postfix-panel" aria-labelledby="visual-title">
+                <div class="infix-postfix-section-heading">
+                    <div>
+                        <p class="infix-postfix-eyebrow">STEP 2</p>
+                        <h2 id="visual-title">Queue visualization</h2>
+                    </div>
+                    <span class="infix-postfix-count">FIFO order</span>
+                </div>
+
+                {% if queue %}
+                    <div class="queue-visual-scroll" role="region" aria-label="Current queue, from front to rear" tabindex="0">
+                        <ol class="queue-visual">
+                            {% for value in queue %}
+                                <li class="queue-visual-item">
+                                    <span class="queue-position">
+                                        {% if loop.first and loop.last %}FRONT / REAR{% elif loop.first %}FRONT{% elif loop.last %}REAR{% else %}QUEUE ITEM{% endif %}
+                                    </span>
+                                    <span class="queue-value">{{ value }}</span>
+                                    <span class="queue-index">Position {{ loop.index }}</span>
+                                </li>
+                                {% if not loop.last %}
+                                    <li class="queue-arrow" aria-hidden="true">→</li>
+                                {% endif %}
+                            {% endfor %}
+                        </ol>
+                    </div>
+                    <p class="queue-direction">Items leave from the front ← <span aria-hidden="true">|</span> Items join at the rear →</p>
+                {% else %}
+                    <div class="queue-empty" role="status">
+                        <span class="queue-empty-icon" aria-hidden="true">∅</span>
+                        <strong>The queue is empty</strong>
+                        <span>Enqueue a value to add the first item at the rear.</span>
+                    </div>
+                {% endif %}
+            </section>
+        </section>
+    </main>
+</body>
+</html>

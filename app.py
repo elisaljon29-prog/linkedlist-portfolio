@@ -291,5 +291,42 @@ def infix_to_postfix():
         stack = converter.stack
     return render_template('InfixToPostfix.html', postfix=postfix, stack=stack)
 
+@app.route('/works/area/enque_dequeue', methods=['GET', 'POST'])
+def enque_dequeue():
+    queue = session.get('queue', [])
+    message = None
+    category = 'success'
+
+    if request.method == 'POST':
+        action = request.form.get('action', '')
+        value = request.form.get('value', '').strip()
+
+        if action == 'enqueue':
+            if not value:
+                message = 'Enter a value to enqueue.'
+                category = 'error'
+            else:
+                queue.append(value)
+                message = f'Enqueued {value}.'
+        elif action == 'dequeue':
+            if not queue:
+                message = 'The queue is empty. Cannot dequeue.'
+                category = 'error'
+            else:
+                removed_value = queue.pop(0)
+                message = f'Dequeued {removed_value}.'
+        elif action == 'clear':
+            queue.clear()
+            message = 'Cleared the queue.'
+        else:
+            message = 'Choose a valid queue operation.'
+            category = 'error'
+
+        session['queue'] = queue
+        flash(message, category)
+        return redirect(url_for('enque_dequeue'))
+
+    return render_template('enque_dequeue.html', queue=queue)
+
 if __name__ == "__main__":
     app.run(debug=True)
