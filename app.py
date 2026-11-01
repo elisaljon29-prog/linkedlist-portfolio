@@ -328,5 +328,14 @@ def enque_dequeue():
 
     return render_template('enque_dequeue.html', queue=queue)
 
+@app.route('/works/area/sorting', methods=['GET', 'POST'])
+def sorting():
+    sorted_list = []
+    if request.method == 'POST':
+        numbers = request.form.get('numbers', '').split(',')
+        numbers = [int(x.strip()) for x in numbers if x.strip()]
+        sorted_list = sorted(numbers)
+    return render_template('sorting.html', sorted_list=sorted_list)
+
 if __name__ == "__main__":
     app.run(debug=True)

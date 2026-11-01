@@ -1967,6 +1967,233 @@ main {
 .infix-postfix-error{margin:16px 0 0;color:#b42318;background:#fff1f0;border:1px solid #ffd2ce;padding:12px 14px;border-radius:10px;font-size:.9rem}.infix-postfix-visual-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}.infix-postfix-subpanel{min-width:0;padding:18px;background:#fff;border:1px solid #e4eaf1;border-radius:15px}.infix-postfix-subpanel h3{font-size:1rem;margin:0 0 14px;color:#253247}.infix-postfix-current{width:56px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:13px;background:#eaf3ff;border:1px solid #c8defb;color:#0a66c2;font-size:1.5rem;font-weight:700}.infix-postfix-explanation{font-size:.9rem;color:#66758a;line-height:1.65;margin:14px 0 0}.infix-postfix-stack{display:flex;flex-wrap:wrap;gap:9px;align-items:center;min-height:54px}.postfix-progress{margin-top:16px}.output-blocks{min-height:44px}.step-actions{justify-content:flex-start}.infix-postfix-result{margin-top:22px;padding:26px;background:#f3f8ff;border:1px solid #d7e7ff;border-radius:18px}.infix-postfix-result h2{margin-bottom:14px}.infix-postfix-final{font-size:clamp(1.8rem,4vw,2.7rem);font-weight:700;letter-spacing:.04em;overflow-wrap:anywhere;color:#0a66c2;min-height:1.3em;margin-bottom:18px}.infix-postfix-copy{background:#fff;color:#0a66c2}.infix-postfix-copy:hover:not(:disabled){color:#fff}.infix-postfix-message{padding:12px 15px;border-radius:10px;margin:14px 0}.infix-postfix-message-error{background:#fff1f0;color:#b42318}.infix-postfix-message-success{background:#e9f7ef;color:#187348}
 @media(max-width:650px){.infix-postfix-page{padding:28px 12px 48px}.infix-postfix-container{padding:22px 16px;border-radius:18px}.infix-postfix-panel{padding:18px 14px}.infix-postfix-visual-grid{grid-template-columns:1fr}.infix-postfix-section-heading{align-items:flex-start}.infix-postfix-count{font-size:.75rem;padding:7px 10px}.infix-postfix-token{width:37px;height:41px}.infix-postfix-actions .infix-postfix-button{flex:1 1 auto}}
 
+.sorting-algorithms {
+    margin-top: 30px;
+}
+
+.sorting-section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.sorting-section-heading h2 {
+    margin: 0;
+    color: #1c2e44;
+    font-size: clamp(1.25rem, 2.4vw, 1.7rem);
+}
+
+.sorting-eyebrow {
+    margin: 0 0 7px;
+    color: #0a66c2;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+}
+
+.sorting-form {
+    display: grid;
+    gap: 10px;
+    max-width: 680px;
+}
+
+.sorting-label {
+    margin-top: 8px;
+    color: #253247;
+    font-size: .92rem;
+    font-weight: 600;
+}
+
+.sorting-input {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    border: 1px solid #ccd7e4;
+    border-radius: 10px;
+    background: #fff;
+    color: #1c2e44;
+    font: inherit;
+}
+
+.sorting-input:focus {
+    border-color: #0a66c2;
+    outline: 3px solid rgba(10, 102, 194, .13);
+}
+
+.sorting-hint {
+    margin: 0;
+    color: #718096;
+    font-size: .82rem;
+}
+
+.sorting-form > button,
+.sorting-control {
+    min-height: 44px;
+    padding: 10px 17px;
+    border: 1px solid #0a66c2;
+    border-radius: 10px;
+    background: #0a66c2;
+    color: #fff;
+    font: inherit;
+    font-size: .9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, transform .15s, box-shadow .15s;
+}
+
+.sorting-form > button {
+    justify-self: start;
+    margin-top: 8px;
+}
+
+.sorting-form > button:hover,
+.sorting-control:hover:not(:disabled) {
+    background: #084f96;
+    box-shadow: 0 5px 14px rgba(10, 102, 194, .15);
+    transform: translateY(-1px);
+}
+
+.sorting-error {
+    margin: 4px 0 0;
+    padding: 11px 13px;
+    border: 1px solid #ffd2ce;
+    border-radius: 9px;
+    background: #fff1f0;
+    color: #b42318;
+    font-size: .88rem;
+}
+
+.sorting-visualization {
+    margin-top: 34px;
+    padding: clamp(18px, 3vw, 30px);
+    border: 1px solid #e1e7ef;
+    border-radius: 18px;
+    background: #fbfcfe;
+}
+
+.sorting-visualization[hidden] {
+    display: none;
+}
+
+.sorting-result[hidden] {
+    display: none;
+}
+
+.sorting-algorithm-badge {
+    flex-shrink: 0;
+    padding: 8px 13px;
+    border-radius: 999px;
+    background: #eaf3ff;
+    color: #0a66c2;
+    font-size: .82rem;
+    font-weight: 700;
+}
+
+.sorting-chart {
+    display: flex;
+    min-height: 270px;
+    align-items: flex-end;
+    justify-content: center;
+    gap: clamp(5px, 1.2vw, 12px);
+    overflow-x: auto;
+    padding: 20px 10px 8px;
+    border: 1px solid #e4eaf1;
+    border-radius: 14px;
+    background: #fff;
+}
+
+.sorting-bar-item {
+    display: grid;
+    min-width: 32px;
+    max-width: 76px;
+    height: 230px;
+    flex: 1 0 32px;
+    grid-template-rows: 1fr auto auto;
+    align-items: end;
+    gap: 5px;
+    text-align: center;
+}
+
+.sorting-bar {
+    width: 100%;
+    min-height: 12px;
+    border-radius: 7px 7px 2px 2px;
+    background: linear-gradient(180deg, #70b7f4, #0a66c2);
+    transition: height .25s ease, background .2s, transform .2s;
+}
+
+.sorting-bar.is-active {
+    background: linear-gradient(180deg, #ffbd69, #ed7d24);
+    transform: scaleX(1.06);
+}
+
+.sorting-bar-value {
+    color: #253247;
+    font-size: .78rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.sorting-bar-index {
+    color: #8390a0;
+    font-size: .7rem;
+}
+
+.sorting-step-description {
+    min-height: 1.6em;
+    margin: 18px 0 5px;
+    color: #34516f;
+    font-weight: 600;
+    line-height: 1.6;
+}
+
+.sorting-step-count {
+    margin: 0;
+    color: #718096;
+    font-size: .82rem;
+}
+
+.sorting-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 18px;
+}
+
+.sorting-control-secondary {
+    border-color: #d3deea;
+    background: #fff;
+    color: #31506e;
+}
+
+.sorting-control-secondary:hover:not(:disabled) {
+    background: #f0f5fa;
+    color: #1c2e44;
+}
+
+.sorting-control:disabled {
+    cursor: not-allowed;
+    opacity: .48;
+}
+
+@media (max-width: 600px) {
+    .sorting-section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .sorting-controls .sorting-control {
+        flex: 1 1 40%;
+    }
+
+    .sorting-chart {
+        justify-content: flex-start;
+    }
+}
+
 .queue-operation-form {
     max-width: 680px;
 }

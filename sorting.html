@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Sorting Algorithms | LinkElis Portfolio</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='LinkElist logo.png') }}" alt="LinkElis Logo">
+            </a>
+        </div>
+        <div class="nav">
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('works') }}">Works</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main class="infix-postfix-page">
+        <section class="infix-postfix-container">
+            <p class="infix-postfix-eyebrow">DATA STRUCTURE VISUALIZER</p>
+            <h1>Sorting Algorithms</h1>
+            <p class="infix-postfix-intro">
+                Visualize different sorting algorithms including Bubble Sort, Selection Sort, Insertion Sort, Merge Sort, and Quick Sort.
+            </p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <p class="infix-postfix-message infix-postfix-message-{{ category }}" role="status" aria-live="polite">
+                            {{ message }}
+                        </p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <section class="sorting-algorithms" aria-labelledby="sorting-title">
+                <div class="sorting-section-heading">
+                    <div>
+                        <p class="sorting-eyebrow">STEP 1</p>
+                        <h2 id="sorting-title">Choose a sorting algorithm</h2>
+                    </div>
+                </div>
+
+                <form method="POST" class="sorting-form" id="sorting-form">
+                    <label class="sorting-label" for="algorithm">Which sorting option would you like to visualize?</label>
+                    <select class="sorting-input" id="algorithm" name="algorithm" required>
+                        <option value="" selected disabled>Choose an algorithm</option>
+                        <option value="bubble">Bubble Sort</option>
+                        <option value="selection">Selection Sort</option>
+                        <option value="insertion">Insertion Sort</option>
+                        <option value="merge">Merge Sort</option>
+                        <option value="quick">Quick Sort</option>
+                    </select>
+
+                    <label class="sorting-label" for="numbers">Enter numbers to sort (comma-separated)</label>
+                    <input
+                        class="sorting-input"
+                        type="text"
+                        id="numbers"
+                        name="numbers"
+                        placeholder="e.g. 5, 3, 8, 1"
+                        required
+                    >
+                    <p class="sorting-hint">Use whole numbers separated by commas (up to 20 values).</p>
+                    <button type="submit">Build visualization</button>
+                    <p class="sorting-error" id="sorting-error" role="alert" hidden></p>
+                </form>
+
+                <section class="sorting-visualization" id="sorting-visualization" aria-labelledby="visualization-title" hidden>
+                    <div class="sorting-section-heading">
+                        <div>
+                            <p class="sorting-eyebrow">STEP 2</p>
+                            <h2 id="visualization-title">Sorting visualization</h2>
+                        </div>
+                        <span class="sorting-algorithm-badge" id="algorithm-badge"></span>
+                    </div>
+
+                    <div class="sorting-chart" id="sorting-chart" role="img" aria-label="Array visualization"></div>
+                    <p class="sorting-step-description" id="step-description" aria-live="polite"></p>
+                    <p class="sorting-step-count" id="step-count"></p>
+
+                    <div class="sorting-controls" aria-label="Visualization controls">
+                        <button class="sorting-control sorting-control-secondary" id="previous-step" type="button">Previous</button>
+                        <button class="sorting-control" id="play-pause" type="button">Play</button>
+                        <button class="sorting-control sorting-control-secondary" id="next-step" type="button">Next</button>
+                        <button class="sorting-control sorting-control-secondary" id="restart" type="button">Restart</button>
+                    </div>
+                </section>
+
+                <div class="result-box sorting-result" id="sorting-result" {% if not sorted_list %}hidden{% endif %}>
+                    <span>Sorted Result</span>
+                    <strong id="sorted-result-value">{{ sorted_list }}</strong>
+                </div>
+            </section>
+        </section>
+    </main>
+    <script>
+        const sortingForm = document.getElementById("sorting-form");
+        const algorithmInput = document.getElementById("algorithm");
+        const numbersInput = document.getElementById("numbers");
+        const sortingError = document.getElementById("sorting-error");
+        const visualization = document.getElementById("sorting-visualization");
+        const sortedResult = document.getElementById("sorting-result");
+        const sortedResultValue = document.getElementById("sorted-result-value");
+        const chart = document.getElementById("sorting-chart");
+        const stepDescription = document.getElementById("step-description");
+        const stepCount = document.getElementById("step-count");
+        const playPauseButton = document.getElementById("play-pause");
+        const previousButton = document.getElementById("previous-step");
+        const nextButton = document.getElementById("next-step");
+        const restartButton = document.getElementById("restart");
+        const algorithmNames = {
+            bubble: "Bubble Sort",
+            selection: "Selection Sort",
+            insertion: "Insertion Sort",
+            merge: "Merge Sort",
+            quick: "Quick Sort"
+        };
+        let steps = [];
+        let currentStep = 0;
+        let playbackTimer = null;
+
+        function addStep(values, active, description) {
+            steps.push({ values: [...values], active, description });
+        }
+
+        function buildSteps(values, algorithm) {
+            const array = [...values];
+            steps = [];
+            addStep(array, [], "Starting array");
+
+            if (algorithm === "bubble") {
+                for (let end = array.length - 1; end > 0; end -= 1) {
+                    for (let index = 0; index < end; index += 1) {
+                        const left = array[index];
+                        const right = array[index + 1];
+                        if (left > right) {
+                            [array[index], array[index + 1]] = [array[index + 1], array[index]];
+                            addStep(array, [index, index + 1], `${left} is greater than ${right}, so swap them.`);
+                        } else {
+                            addStep(array, [index, index + 1], `${left} is less than or equal to ${right}, so leave them in place.`);
+                        }
+                    }
+                }
+            } else if (algorithm === "selection") {
+                for (let start = 0; start < array.length - 1; start += 1) {
+                    let minimum = start;
+                    for (let index = start + 1; index < array.length; index += 1) {
+                        addStep(array, [minimum, index], `Compare ${array[minimum]} with ${array[index]} to find the smallest remaining value.`);
+                        if (array[index] < array[minimum]) minimum = index;
+                    }
+                    if (minimum !== start) {
+                        const selected = array[minimum];
+                        [array[start], array[minimum]] = [array[minimum], array[start]];
+                        addStep(array, [start, minimum], `Place the smallest value, ${selected}, at position ${start + 1}.`);
+                    } else {
+                        addStep(array, [start], `${array[start]} is already the smallest remaining value.`);
+                    }
+                }
+            } else if (algorithm === "insertion") {
+                for (let index = 1; index < array.length; index += 1) {
+                    const value = array[index];
+                    let position = index - 1;
+                    while (position >= 0) {
+                        addStep(array, [position, index], `Compare ${array[position]} with ${value}, the value being inserted.`);
+                        if (array[position] <= value) break;
+                        array[position + 1] = array[position];
+                        addStep(array, [position, position + 1], `Shift ${array[position]} one position to the right.`);
+                        position -= 1;
+                    }
+                    array[position + 1] = value;
+                    addStep(array, [position + 1], `Insert ${value} into its correct position.`);
+                }
+            } else if (algorithm === "merge") {
+                function mergeSort(start, end) {
+                    if (end - start < 2) return;
+                    const middle = Math.floor((start + end) / 2);
+                    mergeSort(start, middle);
+                    mergeSort(middle, end);
+
+                    const left = array.slice(start, middle);
+                    const right = array.slice(middle, end);
+                    let leftIndex = 0;
+                    let rightIndex = 0;
+                    let target = start;
+                    while (leftIndex < left.length && rightIndex < right.length) {
+                        if (left[leftIndex] <= right[rightIndex]) {
+                            array[target] = left[leftIndex];
+                            leftIndex += 1;
+                        } else {
+                            array[target] = right[rightIndex];
+                            rightIndex += 1;
+                        }
+                        addStep(array, [target], `Merge the next smallest value into position ${target + 1}.`);
+                        target += 1;
+                    }
+                    while (leftIndex < left.length) {
+                        array[target] = left[leftIndex];
+                        addStep(array, [target], `Copy ${left[leftIndex]} into position ${target + 1}.`);
+                        leftIndex += 1;
+                        target += 1;
+                    }
+                    while (rightIndex < right.length) {
+                        array[target] = right[rightIndex];
+                        addStep(array, [target], `Copy ${right[rightIndex]} into position ${target + 1}.`);
+                        rightIndex += 1;
+                        target += 1;
+                    }
+                }
+                mergeSort(0, array.length);
+            } else if (algorithm === "quick") {
+                function quickSort(low, high) {
+                    if (low >= high) return;
+                    const pivot = array[high];
+                    let boundary = low;
+                    for (let index = low; index < high; index += 1) {
+                        addStep(array, [index, high], `Compare ${array[index]} with pivot ${pivot}.`);
+                        if (array[index] <= pivot) {
+                            [array[boundary], array[index]] = [array[index], array[boundary]];
+                            addStep(array, [boundary, index], `${array[boundary]} belongs before the pivot; move it to the left partition.`);
+                            boundary += 1;
+                        }
+                    }
+                    [array[boundary], array[high]] = [array[high], array[boundary]];
+                    addStep(array, [boundary, high], `Place pivot ${pivot} in its final position.`);
+                    quickSort(low, boundary - 1);
+                    quickSort(boundary + 1, high);
+                }
+                quickSort(0, array.length - 1);
+            }
+
+            addStep(array, [], "Sorting complete!");
+        }
+
+        function renderStep() {
+            const step = steps[currentStep];
+            const minimum = Math.min(...step.values);
+            const maximum = Math.max(...step.values);
+            chart.replaceChildren();
+
+            step.values.forEach((value, index) => {
+                const item = document.createElement("div");
+                item.className = "sorting-bar-item";
+                item.setAttribute("aria-label", `Position ${index + 1}: ${value}`);
+
+                const bar = document.createElement("div");
+                const height = maximum === minimum ? 55 : 28 + ((value - minimum) / (maximum - minimum)) * 72;
+                bar.className = `sorting-bar${step.active.includes(index) ? " is-active" : ""}`;
+                bar.style.height = `${height}%`;
+                bar.title = `Position ${index + 1}: ${value}`;
+
+                const valueLabel = document.createElement("span");
+                valueLabel.className = "sorting-bar-value";
+                valueLabel.textContent = value;
+                const indexLabel = document.createElement("span");
+                indexLabel.className = "sorting-bar-index";
+                indexLabel.textContent = index + 1;
+
+                item.append(bar, valueLabel, indexLabel);
+                chart.append(item);
+            });
+
+            stepDescription.textContent = step.description;
+            stepCount.textContent = `Step ${currentStep + 1} of ${steps.length}`;
+            previousButton.disabled = currentStep === 0;
+            nextButton.disabled = currentStep === steps.length - 1;
+            if (currentStep === steps.length - 1) stopPlayback();
+        }
+
+        function stopPlayback() {
+            if (playbackTimer !== null) {
+                window.clearInterval(playbackTimer);
+                playbackTimer = null;
+            }
+            playPauseButton.textContent = "Play";
+            playPauseButton.setAttribute("aria-label", "Play visualization");
+        }
+
+        sortingForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            sortingError.hidden = true;
+
+            if (!algorithmInput.value) {
+                sortingError.textContent = "Choose a sorting algorithm first.";
+                sortingError.hidden = false;
+                algorithmInput.focus();
+                return;
+            }
+
+            const rawValues = numbersInput.value.split(",").map((value) => value.trim()).filter(Boolean);
+            const values = rawValues.map(Number);
+            if (values.length === 0 || values.some((value) => !Number.isSafeInteger(value))) {
+                sortingError.textContent = "Enter one or more valid whole numbers, separated by commas.";
+                sortingError.hidden = false;
+                numbersInput.focus();
+                return;
+            }
+            if (values.length > 20) {
+                sortingError.textContent = "Use 20 numbers or fewer so the sorting steps stay easy to follow.";
+                sortingError.hidden = false;
+                numbersInput.focus();
+                return;
+            }
+
+            stopPlayback();
+            buildSteps(values, algorithmInput.value);
+            currentStep = 0;
+            sortedResultValue.textContent = JSON.stringify(steps[steps.length - 1].values);
+            sortedResult.hidden = false;
+            document.getElementById("algorithm-badge").textContent = algorithmNames[algorithmInput.value];
+            visualization.hidden = false;
+            renderStep();
+            visualization.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+
+        playPauseButton.addEventListener("click", () => {
+            if (playbackTimer !== null) {
+                stopPlayback();
+                return;
+            }
+            if (currentStep === steps.length - 1) currentStep = 0;
+            playPauseButton.textContent = "Pause";
+            playPauseButton.setAttribute("aria-label", "Pause visualization");
+            renderStep();
+            playbackTimer = window.setInterval(() => {
+                if (currentStep >= steps.length - 1) {
+                    stopPlayback();
+                    return;
+                }
+                currentStep += 1;
+                renderStep();
+            }, 700);
+        });
+
+        previousButton.addEventListener("click", () => {
+            stopPlayback();
+            if (currentStep > 0) currentStep -= 1;
+            renderStep();
+        });
+
+        nextButton.addEventListener("click", () => {
+            stopPlayback();
+            if (currentStep < steps.length - 1) currentStep += 1;
+            renderStep();
+        });
+
+        restartButton.addEventListener("click", () => {
+            stopPlayback();
+            currentStep = 0;
+            renderStep();
+        });
+    </script>
+</body>
+</html>
