@@ -337,5 +337,288 @@ def sorting():
         sorted_list = sorted(numbers)
     return render_template('sorting.html', sorted_list=sorted_list)
 
+@app.route('/works/area/binary_tree', methods=['GET', 'POST'])
+def binary_tree():
+    tree = BinaryTree()
+    tree.restore(
+        session.get('binary_tree'),
+        session.get('binary_tree_values', []),
+    )
+
+    if request.method == 'POST':
+        operation = request.form.get('operation', '')
+        if operation == 'preorder_traversal':
+            traversal_name = 'Preorder'
+            traversal = tree.preorder(tree.root)
+        elif operation == 'inorder_traversal':
+            traversal_name = 'Inorder'
+            traversal = tree.inorder(tree.root)
+        elif operation == 'postorder_traversal':
+            traversal_name = 'Postorder'
+            traversal = tree.post_traversal(tree.root, [])
+        else:
+            traversal = None
+
+        if traversal is not None:
+            session['binary_tree_traversal'] = traversal
+            session['binary_tree_traversal_name'] = traversal_name
+        else:
+            try:
+                value = int(request.form.get('tree-value', '').strip())
+            except ValueError:
+                flash('Enter a whole number to perform this operation.', 'error')
+                return redirect(url_for('binary_tree'))
+
+            session.pop('binary_tree_traversal', None)
+            session.pop('binary_tree_traversal_name', None)
+            if operation == 'insert':
+                if tree.root is None:
+                    tree.root = BinaryTreeNode(value)
+                    flash(f'Inserted {value} as the root node.', 'success')
+                else:
+                    try:
+                        parent = int(request.form.get('tree-parent', '').strip())
+                    except ValueError:
+                        flash('Choose an existing parent node.', 'error')
+                        return redirect(url_for('binary_tree'))
+
+                    side = request.form.get('tree-side', '')
+                    inserted, message = tree.insert_as_child(parent, side, value)
+                    flash(
+                        f'Inserted {value} as the {side} child of {parent}.'
+                        if inserted else message,
+                        'success' if inserted else 'error',
+                    )
+            elif operation == 'search':
+                if tree.search(tree.root, value) is not None:
+                    flash(f'{value} was found in the tree.', 'success')
+                else:
+                    flash(f'{value} was not found in the tree.', 'error')
+            elif operation == 'delete':
+                if tree.search(tree.root, value) is None:
+                    flash(f'{value} was not found in the tree.', 'error')
+                else:
+                    tree.root = tree.delete_node(tree.root, value)
+                    flash(f'Deleted {value} from the tree.', 'success')
+            else:
+                flash('Choose a valid tree operation.', 'error')
+
+        session['binary_tree'] = tree.serialize(tree.root)
+        session.pop('binary_tree_values', None)
+        return redirect(url_for('binary_tree'))
+
+    return render_template(
+        'binary_tree.html',
+        tree_visualization=render_binary_tree(tree.root),
+        node_count=len(tree.preorder(tree.root)),
+        tree_values=tree.preorder(tree.root),
+        traversal=session.get('binary_tree_traversal'),
+        traversal_name=session.get('binary_tree_traversal_name'),
+    )
+
+
+class BinaryTreeNode:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+
+
+class BinaryTree:
+    def __init__(self):
+        self.root = None
+
+    def restore(self, snapshot, legacy_values):
+        if isinstance(snapshot, dict):
+            self.root = self.deserialize(snapshot)
+            return
+
+        # Migrate sessions created before the tree stored its child structure.
+        for value in legacy_values:
+            if self.root is None:
+                self.root = BinaryTreeNode(value)
+                continue
+            queue = [self.root]
+            index = 0
+            while index < len(queue):
+                parent = queue[index]
+                index += 1
+                if parent.left is None:
+                    parent.left = BinaryTreeNode(value)
+                    break
+                if parent.right is None:
+                    parent.right = BinaryTreeNode(value)
+                    break
+                queue.extend((parent.left, parent.right))
+
+    def serialize(self, root):
+        if root is None:
+            return None
+        return {
+            'data': root.data,
+            'left': self.serialize(root.left),
+            'right': self.serialize(root.right),
+        }
+
+    def deserialize(self, snapshot):
+        node = BinaryTreeNode(snapshot['data'])
+        if isinstance(snapshot.get('left'), dict):
+            node.left = self.deserialize(snapshot['left'])
+        if isinstance(snapshot.get('right'), dict):
+            node.right = self.deserialize(snapshot['right'])
+        return node
+
+    def insert_as_child(self, parent_value, side, data):
+        if side not in ('left', 'right'):
+            return False, 'Choose whether to insert on the left or right.'
+        if self.search(self.root, data) is not None:
+            return False, f'{data} is already in the tree.'
+
+        parent = self.search(self.root, parent_value)
+        if parent is None:
+            return False, 'Choose an existing parent node.'
+        if getattr(parent, side) is not None:
+            return False, f'{parent_value} already has a {side} child.'
+
+        setattr(parent, side, BinaryTreeNode(data))
+        return True, ''
+
+    def search(self, root, key):
+        if root is None or root.data == key:
+            return root
+        found = self.search(root.left, key)
+        return found if found is not None else self.search(root.right, key)
+
+    def post_traversal(self, start, traversal):
+        if start is not None:
+            self.post_traversal(start.left, traversal)
+            self.post_traversal(start.right, traversal)
+            traversal.append(start.data)
+        return traversal
+
+    def inorder(self, root):
+        if root is None:
+            return []
+        return (
+            self.inorder(root.left)
+            + [root.data]
+            + self.inorder(root.right)
+        )
+
+    def delete_node(self, root, key):
+        if root is None:
+            return None
+
+        queue = [(root, None)]
+        target = None
+        deepest = None
+        deepest_parent = None
+        index = 0
+        while index < len(queue):
+            node, parent = queue[index]
+            index += 1
+            if node.data == key and target is None:
+                target = node
+            deepest = node
+            deepest_parent = parent
+            if node.left is not None:
+                queue.append((node.left, node))
+            if node.right is not None:
+                queue.append((node.right, node))
+
+        if target is None or deepest is None:
+            return root
+        if target is deepest:
+            if deepest_parent is None:
+                return None
+            if deepest_parent.left is deepest:
+                deepest_parent.left = None
+            else:
+                deepest_parent.right = None
+            return root
+
+        target.data = deepest.data
+        if deepest_parent.left is deepest:
+            deepest_parent.left = None
+        else:
+            deepest_parent.right = None
+        return root
+
+    def preorder(self, root):
+        if root is None:
+            return []
+        return (
+            [root.data]
+            + self.preorder(root.left)
+            + self.preorder(root.right)
+        )
+
+
+def render_binary_tree(root):
+    if root is None:
+        return (
+            '<div class="binary-tree-empty">'
+            '<span class="binary-tree-empty-icon" aria-hidden="true">+</span>'
+            '<strong>Your tree is empty</strong>'
+            '<span>Insert a number to create the root node.</span>'
+            '</div>'
+        )
+
+    positions = {}
+    ordered_nodes = []
+    depths = {}
+    max_depth = 0
+
+    def collect_nodes(node, depth):
+        nonlocal max_depth
+        if node is None:
+            return
+        collect_nodes(node.left, depth + 1)
+        depths[id(node)] = depth
+        ordered_nodes.append(node)
+        max_depth = max(max_depth, depth)
+        collect_nodes(node.right, depth + 1)
+
+    collect_nodes(root, 0)
+    left_count = next(index for index, node in enumerate(ordered_nodes) if node is root)
+    right_count = len(ordered_nodes) - left_count - 1
+    width = max(560, (2 * max(left_count, right_count) + 1) * 84 + 72)
+    height = max(180, 72 + (max_depth + 1) * 92)
+    root_center_x = width // 2
+    for index, node in enumerate(ordered_nodes):
+        positions[id(node)] = (
+            root_center_x + (index - left_count) * 84,
+            36 + depths[id(node)] * 92,
+        )
+    edges = []
+    nodes = []
+
+    for node in ordered_nodes:
+        x, y = positions[id(node)]
+        for child in (node.left, node.right):
+            if child is not None:
+                child_x, child_y = positions[id(child)]
+                edges.append(
+                    f'<line class="binary-tree-edge" x1="{x}" y1="{y}" '
+                    f'x2="{child_x}" y2="{child_y}" '
+                    'stroke="#9aacc0" stroke-width="2.5" />'
+                )
+        node_class = 'binary-tree-node binary-tree-root' if node is root else 'binary-tree-node'
+        nodes.append(
+            f'<g class="{node_class}"><circle cx="{x}" cy="{y}" r="25" fill="#e8f3fc" '
+            'stroke="#0a66c2" stroke-width="3" />'
+            f'<text x="{x}" y="{y}" dominant-baseline="middle" '
+            'text-anchor="middle" fill="#253247" font-size="13" '
+            f'font-family="sans-serif" font-weight="700">{node.data}</text></g>'
+        )
+
+    return (
+        f'<svg class="binary-tree-svg" role="img" '
+        f'aria-label="Binary tree with {len(ordered_nodes)} nodes" '
+        f'width="{width}" height="{height}" viewBox="0 0 {width} {height}" '
+        f'xmlns="http://www.w3.org/2000/svg">'
+        f'{"".join(edges)}{"".join(nodes)}</svg>'
+    )
+
 if __name__ == "__main__":
     app.run(debug=True)

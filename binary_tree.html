@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Binary Tree | LinkElis Portfolio</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='LinkElist logo.png') }}" alt="LinkElis Logo">
+            </a>
+        </div>
+        <div class="nav">
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('works') }}">Works</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main class="binary-tree-page">
+        <section class="binary-tree-container">
+            <p class="binary-tree-eyebrow">DATA STRUCTURE VISUALIZER</p>
+            <h1>Binary Tree</h1>
+            <p class="binary-tree-intro">
+                Add each unique whole number to an available left or right child position.
+            </p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <p class="binary-tree-message binary-tree-message-{{ category }}" role="status" aria-live="polite">
+                            {{ message }}
+                        </p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <section class="binary-tree-panel" aria-labelledby="operation-title">
+                <div class="binary-tree-section-heading">
+                    <div>
+                        <p class="binary-tree-eyebrow">STEP 1</p>
+                        <h2 id="operation-title">Choose a binary tree operation</h2>
+                    </div>
+                </div>
+
+                <form method="POST" class="binary-tree-operation-form">
+                    <div class="binary-tree-field">
+                        <label class="binary-tree-label" for="tree-value">Whole number</label>
+                        <input
+                            class="binary-tree-input"
+                            type="number"
+                            id="tree-value"
+                            name="tree-value"
+                            placeholder="Enter a whole number"
+                            step="1"
+                            required
+                        >
+                    </div>
+                    <div class="binary-tree-field">
+                        <label class="binary-tree-label" for="tree-parent">Parent node</label>
+                        <select class="binary-tree-select" id="tree-parent" name="tree-parent">
+                            {% if tree_values %}
+                                <option value="" selected disabled>Choose a parent node</option>
+                                {% for value in tree_values %}
+                                    <option value="{{ value }}">{{ value }}</option>
+                                {% endfor %}
+                            {% else %}
+                                <option value="" selected>No parent needed; this becomes the root</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div class="binary-tree-field">
+                        <label class="binary-tree-label" for="tree-side">Insert on</label>
+                        <select class="binary-tree-select" id="tree-side" name="tree-side" {% if not tree_values %}disabled{% endif %}>
+                            <option value="" selected disabled>Choose an empty side</option>
+                            <option value="left">Left</option>
+                            <option value="right">Right</option>
+                        </select>
+                    </div>
+                    <p class="binary-tree-insert-hint">
+                        Choose a parent and an empty side. Values can be placed on either side regardless of size.
+                    </p>
+                    <button class="binary-tree-button" type="submit" name="operation" value="insert">Insert</button>
+                    <button class="binary-tree-button binary-tree-button-secondary" type="submit" name="operation" value="search">Search</button>
+                    <button class="binary-tree-button binary-tree-button-danger" type="submit" name="operation" value="delete">Delete</button>
+                    <button class="binary-tree-button binary-tree-button-secondary" type="submit" name="operation" value="preorder_traversal" formnovalidate>
+                        Preorder
+                    </button>
+                    <button class="binary-tree-button binary-tree-button-secondary" type="submit" name="operation" value="inorder_traversal" formnovalidate>
+                        Inorder
+                    </button>
+                    <button class="binary-tree-button binary-tree-button-secondary" type="submit" name="operation" value="postorder_traversal" formnovalidate>
+                        Postorder
+                    </button>
+                </form>
+                <div class="binary-tree-visualization">
+                    <div class="binary-tree-visualization-heading">
+                        <h2>Tree visualization</h2>
+                        <span>{{ node_count }} {{ 'node' if node_count == 1 else 'nodes' }}</span>
+                    </div>
+                    {{ tree_visualization|safe }}
+                </div>
+                {% if traversal is not none %}
+                    <p class="binary-tree-traversal" role="status">
+                        <strong>{{ traversal_name }} traversal:</strong>
+                        {{ traversal|join(', ') if traversal else 'Tree is empty' }}
+                    </p>
+                {% endif %}
+            </section>
+        </section>
+    </main>
+</body>
+</html>
